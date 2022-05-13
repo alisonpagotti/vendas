@@ -31,4 +31,9 @@ public class Produto {
 
     @ManyToMany(mappedBy = "produtos", fetch = FetchType.LAZY)
     private List<Venda> venda;
+
+    public void atualizar(String nome, BigDecimal valorProduto) {
+        this.nome = nome;
+        this.valorProduto = valorProduto;
+    }
 }
