@@ -16,5 +16,5 @@ import java.util.List;
 public class AtualizarVendaRequest {
 
     @NotEmpty(message = "A lista de produto não pode estar vazia!")
-    private List<Produto> idProdutos;
+    private List<Integer> idProdutos;
 }

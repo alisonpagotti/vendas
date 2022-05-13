@@ -36,4 +36,9 @@ public class Venda {
             inverseJoinColumns = { @JoinColumn(name = "produto_id") }
     )
     private List<Produto> produtos;
+
+    public void atualizar(List<Produto> produtos, BigDecimal valorVenda) {
+        this.produtos = produtos;
+        this.valorVenda = valorVenda;
+    }
 }
