@@ -7,6 +7,7 @@ import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorResponse;
 import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class VendedorService {
 
     private static final String EX_VENDEDOR_NAO_CADASTRADO = "Vendedor não cadastrado!";
+    private static final String EX_CPF_EMAIL_JA_CADASTRADO = "CPF ou e-mail já cadastrado!";
 
     @Autowired
     private VendedorRepository repository;
@@ -32,16 +34,21 @@ public class VendedorService {
 
     @Transactional
     public VendedorResponse cadastrar(VendedorRequest request) {
-        var vendedor = Vendedor.builder()
-                .nome(request.getNome())
-                .cpf(request.getCpf())
-                .email(request.getEmail())
-                .dataCadastro(dataHoraService.DataHoraAtual())
-                .build();
+        try {
+            var vendedor = Vendedor.builder()
+                    .nome(request.getNome())
+                    .cpf(request.getCpf())
+                    .email(request.getEmail())
+                    .dataCadastro(dataHoraService.DataHoraAtual())
+                    .build();
 
-        repository.save(vendedor);
+            repository.save(vendedor);
 
-        return VendedorResponse.of(vendedor);
+            return VendedorResponse.of(vendedor);
+
+        } catch (Exception ex) {
+            throw new DataIntegrityViolationException(EX_CPF_EMAIL_JA_CADASTRADO);
+        }
     }
 
     public VendedorResponse detalhar(Integer idVendedor) {

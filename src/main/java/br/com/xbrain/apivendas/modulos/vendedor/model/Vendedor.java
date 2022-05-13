@@ -21,9 +21,9 @@ public class Vendedor {
     private Integer id;
     @Column(name = "NOME")
     private String nome;
-    @Column(name = "CPF")
+    @Column(name = "CPF", unique = true)
     private String cpf;
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
     @Column(name = "DATA_CADASTRO")
     private LocalDateTime dataCadastro;
