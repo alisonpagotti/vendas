@@ -22,7 +22,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "NOME")
+    @Column(name = "NOME", unique = true)
     private String nome;
     @Column(name = "VALOR_PRODUTO")
     private BigDecimal valorProduto;

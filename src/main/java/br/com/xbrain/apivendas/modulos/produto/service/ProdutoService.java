@@ -7,6 +7,7 @@ import br.com.xbrain.apivendas.modulos.produto.dto.ProdutoResponse;
 import br.com.xbrain.apivendas.modulos.produto.model.Produto;
 import br.com.xbrain.apivendas.modulos.produto.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProdutoService {
 
     private static final String EX_PRODUTO_NAO_CADASTRADO = "Produto não cadastrado!";
+    private static final String EX_PRODUTO_JA_CADASTRADO =  "Produto já cadastrado!";
 
     @Autowired
     private ProdutoRepository repository;
@@ -31,15 +33,20 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoResponse cadastrar(ProdutoRequest request) {
-        var produto = Produto.builder()
-                .nome(request.getNome())
-                .valorProduto(request.getValorProduto())
-                .dataCadastro(dataHoraService.DataHoraAtual())
-                .build();
+        try {
+            var produto = Produto.builder()
+                    .nome(request.getNome())
+                    .valorProduto(request.getValorProduto())
+                    .dataCadastro(dataHoraService.DataHoraAtual())
+                    .build();
 
-        repository.save(produto);
+            repository.save(produto);
 
-        return ProdutoResponse.of(produto);
+            return ProdutoResponse.of(produto);
+
+        } catch (Exception ex) {
+            throw new DataIntegrityViolationException(EX_PRODUTO_JA_CADASTRADO);
+        }
     }
 
     public ProdutoResponse detalhar(Integer idProduto) {
