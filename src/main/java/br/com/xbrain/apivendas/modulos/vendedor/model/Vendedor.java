@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,6 @@ public class Vendedor {
     private String cpf;
     @Column(name = "EMAIL")
     private String email;
+    @Column(name = "DATA_CADASTRO")
+    private LocalDateTime dataCadastro;
 }

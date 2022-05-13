@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public class VendedorResponse {
     private String nome;
     private String cpf;
     private String email;
+    private LocalDateTime dataCadastro;
 
     public static List<VendedorResponse> of(List<Vendedor> vendedor) {
         return vendedor.stream().map(VendedorResponse::of).collect(Collectors.toList());
@@ -30,6 +32,7 @@ public class VendedorResponse {
                 .nome(vendedor.getNome())
                 .cpf(vendedor.getCpf())
                 .email(vendedor.getEmail())
+                .dataCadastro(vendedor.getDataCadastro())
                 .build();
     }
 }
