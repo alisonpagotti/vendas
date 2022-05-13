@@ -27,4 +27,9 @@ public class Vendedor {
     private String email;
     @Column(name = "DATA_CADASTRO")
     private LocalDateTime dataCadastro;
+
+    public void atualizar(String nome, String email) {
+        this.nome = nome;
+        this.email = email;
+    }
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class ProdutoService {
 
     private static final String EX_PRODUTO_NAO_CADASTRADO = "Produto não cadastrado!";
+
     @Autowired
     private ProdutoRepository repository;
     @Autowired
