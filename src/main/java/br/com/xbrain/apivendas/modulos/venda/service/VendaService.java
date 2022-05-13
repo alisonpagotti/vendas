@@ -10,6 +10,7 @@ import br.com.xbrain.apivendas.modulos.venda.model.Venda;
 import br.com.xbrain.apivendas.modulos.venda.repository.VendaRepository;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class VendaService {
 
     private static final String EX_VENDA_NAO_CADASTRADA = "Venda não cadastrada!";
+    private static final String EX_VENDEDOR_PRODUTO_NAO_CADASTRADO = "Vendedor ou produto(s) não cadastrado(s)!";
 
     @Autowired
     private VendaRepository repository;
@@ -43,28 +45,33 @@ public class VendaService {
 
     @Transactional
     public VendaResponse cadastrar(VendaRequest request) {
-        var vendedor = vendedorRepository.getById(request.getIdVendedor());
+        try {
+            var vendedor = vendedorRepository.getById(request.getIdVendedor());
 
-        var listaProdutos = request.getIdProdutos()
-                .stream()
-                .map(id -> produtoRepository.getById(id))
-                .collect(Collectors.toList());
+            var listaProdutos = request.getIdProdutos()
+                    .stream()
+                    .map(id -> produtoRepository.getById(id))
+                    .collect(Collectors.toList());
 
-        var valorVenda = listaProdutos
-                .stream()
-                .map(Produto::getValorProduto)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            var valorVenda = listaProdutos
+                    .stream()
+                    .map(Produto::getValorProduto)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        var venda = Venda.builder()
-                .valorVenda(valorVenda)
-                .dataCadastro(dataHoraService.DataHoraAtual())
-                .vendedor(vendedor)
-                .produtos(listaProdutos)
-                .build();
+            var venda = Venda.builder()
+                    .valorVenda(valorVenda)
+                    .dataCadastro(dataHoraService.DataHoraAtual())
+                    .vendedor(vendedor)
+                    .produtos(listaProdutos)
+                    .build();
 
-        repository.save(venda);
+            repository.save(venda);
 
-        return VendaResponse.of(venda);
+            return VendaResponse.of(venda);
+
+        } catch (Exception ex) {
+            throw new DataIntegrityViolationException(EX_PRODUTO_NAO_CADASTRADO);
+        }
     }
 
     public VendaResponse detalhar(Integer idVenda) {
