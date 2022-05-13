@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -27,17 +28,20 @@ public class ProdutoService {
         return ProdutoResponse.of(listaProdutos);
     }
 
-    private ProdutoResponse cadastrar(ProdutoRequest request) {
+    @Transactional
+    public ProdutoResponse cadastrar(ProdutoRequest request) {
         var produto = Produto.builder()
                 .nome(request.getNome())
                 .valorProduto(request.getValorProduto())
                 .dataCadastro(dataHoraService.DataHoraAtual())
                 .build();
 
+        repository.save(produto);
+
         return ProdutoResponse.of(produto);
     }
 
-    private ProdutoResponse detalhar(Integer idProduto) {
+    public ProdutoResponse detalhar(Integer idProduto) {
         try {
             var produto = repository.getById(idProduto);
 
@@ -48,7 +52,8 @@ public class ProdutoService {
         }
     }
 
-    private ProdutoResponse atualizar(Integer idProduto, AtualizarProdutoRequest request) {
+    @Transactional
+    public ProdutoResponse atualizar(Integer idProduto, AtualizarProdutoRequest request) {
         try {
             var produto = repository.getById(idProduto);
             produto.atualizar(request.getNome(), request.getValorProduto());
