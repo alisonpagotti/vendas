@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class DataService {
+public class DataHoraService {
 
     public LocalDateTime DataHoraAtual() {
         return java.time.LocalDateTime.now()

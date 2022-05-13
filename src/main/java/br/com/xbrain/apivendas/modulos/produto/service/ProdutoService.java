@@ -1,6 +1,6 @@
 package br.com.xbrain.apivendas.modulos.produto.service;
 
-import br.com.xbrain.apivendas.modulos.comum.data.service.DataService;
+import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
 import br.com.xbrain.apivendas.modulos.produto.dto.AtualizarProdutoRequest;
 import br.com.xbrain.apivendas.modulos.produto.dto.ProdutoRequest;
 import br.com.xbrain.apivendas.modulos.produto.dto.ProdutoResponse;
@@ -18,7 +18,7 @@ public class ProdutoService {
     private ProdutoRepository repository;
 
     @Autowired
-    private DataService dataService;
+    private DataHoraService dataHoraService;
 
     public List<ProdutoResponse> listarTodos() {
         var listaProdutos = repository.findAll();
@@ -30,7 +30,7 @@ public class ProdutoService {
         var produto = Produto.builder()
                 .nome(request.getNome())
                 .valorProduto(request.getValorProduto())
-                .dataCadastro(dataService.DataHoraAtual())
+                .dataCadastro(dataHoraService.DataHoraAtual())
                 .build();
 
         return ProdutoResponse.of(produto);
