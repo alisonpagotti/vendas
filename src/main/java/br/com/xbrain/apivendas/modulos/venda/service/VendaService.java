@@ -70,7 +70,7 @@ public class VendaService {
             return VendaResponse.of(venda);
 
         } catch (Exception ex) {
-            throw new DataIntegrityViolationException(EX_PRODUTO_NAO_CADASTRADO);
+            throw new DataIntegrityViolationException(EX_VENDEDOR_PRODUTO_NAO_CADASTRADO);
         }
     }
 
