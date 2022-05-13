@@ -2,6 +2,7 @@ package br.com.xbrain.apivendas.modulos.venda.dto;
 
 import br.com.xbrain.apivendas.modulos.produto.model.Produto;
 import br.com.xbrain.apivendas.modulos.venda.model.Venda;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class VendaResponse {
 
     private Integer id;
+    @JsonFormat(pattern="dd-MM-yyyy 'às' HH:mm:ss")
     private LocalDateTime dataCadastro;
     private BigDecimal valorVenda;
     private Integer idVendedor;

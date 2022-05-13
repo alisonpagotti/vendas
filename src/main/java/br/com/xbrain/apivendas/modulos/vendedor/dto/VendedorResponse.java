@@ -1,6 +1,7 @@
 package br.com.xbrain.apivendas.modulos.vendedor.dto;
 
 import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class VendedorResponse {
     private String nome;
     private String cpf;
     private String email;
+    @JsonFormat(pattern="dd-MM-yyyy 'às' HH:mm:ss")
     private LocalDateTime dataCadastro;
 
     public static List<VendedorResponse> of(List<Vendedor> vendedor) {
