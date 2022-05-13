@@ -9,14 +9,15 @@ import br.com.xbrain.apivendas.modulos.produto.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class ProdutoService {
 
+    private static final String EX_PRODUTO_NAO_CADASTRADO = "Produto não cadastrado!";
     @Autowired
     private ProdutoRepository repository;
-
     @Autowired
     private DataHoraService dataHoraService;
 
@@ -37,15 +38,25 @@ public class ProdutoService {
     }
 
     private ProdutoResponse detalhar(Integer idProduto) {
-        var produto = repository.getById(idProduto);
+        try {
+            var produto = repository.getById(idProduto);
 
-        return ProdutoResponse.of(produto);
+            return ProdutoResponse.of(produto);
+
+        } catch (Exception ex) {
+            throw new EntityNotFoundException(EX_PRODUTO_NAO_CADASTRADO);
+        }
     }
 
     private ProdutoResponse atualizar(Integer idProduto, AtualizarProdutoRequest request) {
-        var produto = repository.getById(idProduto);
-        produto.atualizar(request.getNome(), request.getValorProduto());
+        try {
+            var produto = repository.getById(idProduto);
+            produto.atualizar(request.getNome(), request.getValorProduto());
 
-        return ProdutoResponse.of(produto);
+            return ProdutoResponse.of(produto);
+
+        } catch (Exception ex) {
+            throw new EntityNotFoundException(EX_PRODUTO_NAO_CADASTRADO);
+        }
     }
 }
