@@ -22,19 +22,24 @@ public class VendaController {
         return service.listarTodas();
     }
 
+    @GetMapping("listar/vendedor")
+    public List<VendaResponse> listarPorVendedor(@RequestParam Integer id) {
+        return service.listarPorVendedor(id);
+    }
+
     @PostMapping
     public VendaResponse cadastrar(@RequestBody @Valid VendaRequest request) {
         return service.cadastrar(request);
     }
 
-    @GetMapping("detalhar/{idVenda}")
-    public VendaResponse detalhar(@PathVariable Integer idVenda) {
-        return service.detalhar(idVenda);
+    @GetMapping("detalhar")
+    public VendaResponse detalhar(@RequestParam Integer id) {
+        return service.detalhar(id);
     }
 
-    @PutMapping("{idVenda}")
-    public VendaResponse atualizar(@PathVariable Integer idVenda,
+    @PutMapping("atualizar")
+    public VendaResponse atualizar(@RequestParam Integer id,
                                    @RequestBody @Valid AtualizarVendaRequest request) {
-        return service.atualizar(idVenda, request);
+        return service.atualizar(id, request);
     }
 }

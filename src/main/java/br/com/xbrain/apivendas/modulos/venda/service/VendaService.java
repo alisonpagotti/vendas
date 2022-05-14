@@ -43,6 +43,12 @@ public class VendaService {
         return VendaResponse.of(vendas);
     }
 
+    public List<VendaResponse> listarPorVendedor(Integer id) {
+        var vendas = repository.findByVendedorId(id);
+
+        return VendaResponse.of(vendas);
+    }
+
     @Transactional
     public VendaResponse cadastrar(VendaRequest request) {
         try {
@@ -74,9 +80,9 @@ public class VendaService {
         }
     }
 
-    public VendaResponse detalhar(Integer idVenda) {
+    public VendaResponse detalhar(Integer id) {
         try {
-            var venda = repository.getById(idVenda);
+            var venda = repository.getById(id);
 
             return VendaResponse.of(venda);
 
@@ -86,13 +92,13 @@ public class VendaService {
     }
 
     @Transactional
-    public VendaResponse atualizar(Integer idVenda, AtualizarVendaRequest request) {
+    public VendaResponse atualizar(Integer id, AtualizarVendaRequest request) {
         try {
-            var venda = repository.getById(idVenda);
+            var venda = repository.getById(id);
 
             var listaProdutos = request.getIdProdutos()
                     .stream()
-                    .map(id -> produtoRepository.getById(id))
+                    .map(idProduto -> produtoRepository.getById(idProduto))
                     .collect(Collectors.toList());
 
             var valorVenda = listaProdutos
