@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface VendaRepository extends JpaRepository<Venda, Integer> {
 
-    List<Venda> findByVendedorId(Integer idVendedor);
+    List<Venda> findByVendedorId(Integer id);
 
     List<Venda> findByDataCadastroBetween(LocalDateTime inicio, LocalDateTime fim);
+
+    List<Venda> findByVendedorIdAndDataCadastroBetween(Integer id, LocalDateTime inicio, LocalDateTime fim);
 }

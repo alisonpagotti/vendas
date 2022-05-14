@@ -37,6 +37,14 @@ public class VendaController {
         return service.listarPorPeriodo(inicio, fim);
     }
 
+    @GetMapping("listar/vendedor/periodo")
+    public List<VendaResponse> listarPorVendedorPeriodo(
+            @RequestParam Integer id,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate inicio,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fim) {
+        return service.listarPorVendedorPeriodo(id, inicio, fim);
+    }
+
     @PostMapping
     public VendaResponse cadastrar(@RequestBody @Valid VendaRequest request) {
         return service.cadastrar(request);

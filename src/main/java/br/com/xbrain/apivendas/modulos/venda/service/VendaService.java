@@ -59,6 +59,18 @@ public class VendaService {
         return VendaResponse.of(vendas);
     }
 
+    public List<VendaResponse> listarPorVendedorPeriodo(Integer id, LocalDate inicio, LocalDate fim) {
+        var idVendedor = vendedorRepository.getById(id).getId();
+
+        var vendas = repository.findByVendedorIdAndDataCadastroBetween(
+                idVendedor,
+                dataHoraService.dataInicial(inicio),
+                dataHoraService.dataFinal(fim)
+        );
+
+        return VendaResponse.of(vendas);
+    }
+
     @Transactional
     public VendaResponse cadastrar(VendaRequest request) {
         try {
