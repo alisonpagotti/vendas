@@ -24,10 +24,6 @@ public class ProdutoResponse {
     @JsonFormat(pattern="dd-MM-yyyy 'às' HH:mm:ss")
     private LocalDateTime dataCadastro;
 
-    public static List<ProdutoResponse> of(List<Produto> produto) {
-        return produto.stream().map(ProdutoResponse::of).collect(Collectors.toList());
-    }
-
     public static ProdutoResponse of(Produto produto) {
         return ProdutoResponse.builder()
                 .id(produto.getId())
@@ -35,5 +31,9 @@ public class ProdutoResponse {
                 .valorProduto(produto.getValorProduto())
                 .dataCadastro(produto.getDataCadastro())
                 .build();
+    }
+
+    public static List<ProdutoResponse> of(List<Produto> produto) {
+        return produto.stream().map(ProdutoResponse::of).collect(Collectors.toList());
     }
 }

@@ -27,10 +27,6 @@ public class VendaResponse {
     private String nomeVendedor;
     private List<String> produtos;
 
-    public static List<VendaResponse> of(List<Venda> venda) {
-        return venda.stream().map(VendaResponse::of).collect(Collectors.toList());
-    }
-
     public static VendaResponse of(Venda venda) {
         var idVendedor = venda.getVendedor().getId();
         var nomeVendedor = venda.getVendedor().getNome();
@@ -45,5 +41,9 @@ public class VendaResponse {
                 .nomeVendedor(nomeVendedor)
                 .produtos(listaProdutos)
                 .build();
+    }
+
+    public static List<VendaResponse> of(List<Venda> venda) {
+        return venda.stream().map(VendaResponse::of).collect(Collectors.toList());
     }
 }

@@ -1,9 +1,13 @@
 package br.com.xbrain.apivendas.modulos.vendedor.service;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
+import br.com.xbrain.apivendas.modulos.venda.model.Venda;
+import br.com.xbrain.apivendas.modulos.venda.repository.VendaRepository;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.AtualizarVendedorRequest;
+import br.com.xbrain.apivendas.modulos.vendedor.dto.MediaVendedorResponse;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorRequest;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorResponse;
+import br.com.xbrain.apivendas.modulos.vendedor.model.MediaVendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VendedorService {
@@ -24,12 +31,57 @@ public class VendedorService {
     private VendedorRepository repository;
 
     @Autowired
+    private VendaRepository vendaRepository;
+
+    @Autowired
     private DataHoraService dataHoraService;
 
     public List<VendedorResponse> listarTodos() {
         var vendedores = repository.findAll();
 
         return VendedorResponse.of(vendedores);
+    }
+
+    public MediaVendedorResponse mediaPorVendedor(Integer id, LocalDate inicio, LocalDate fim) {
+        var vendedor = repository.getById(id);
+
+        var quantidadeDeVendas = vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                id,
+                dataHoraService.dataInicial(inicio),
+                dataHoraService.dataFinal(fim))
+                .size();
+
+        var dias = inicio.until(fim, ChronoUnit.DAYS) + 1;
+        var media = (double) quantidadeDeVendas / dias;
+
+        var mediaVendedor = MediaVendedor.builder()
+                .nome(vendedor.getNome())
+                .totalVendas(quantidadeDeVendas)
+                .mediaDia(media)
+                .build();
+
+        return MediaVendedorResponse.of(mediaVendedor);
+    }
+
+    public List<MediaVendedorResponse> mediaTodosVendedores(LocalDate inicio, LocalDate fim) {
+        var vendedores = repository.findByVendasDataCadastroBetween(
+                dataHoraService.dataInicial(inicio),
+                dataHoraService.dataFinal(fim)
+        );
+
+        var dias = inicio.until(fim, ChronoUnit.DAYS) + 1;
+
+        var mediaVendedores = vendedores
+                .stream()
+                .map(vendedor -> MediaVendedor.builder()
+                        .nome(vendedor.getNome())
+                        .totalVendas(vendedor.getVendas().size())
+                        .mediaDia((double) (vendedor.getVendas().size() / dias))
+                        .build())
+                .collect(Collectors.toList()
+                );
+
+        return MediaVendedorResponse.of(mediaVendedores);
     }
 
     @Transactional

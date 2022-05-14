@@ -24,10 +24,6 @@ public class VendedorResponse {
     @JsonFormat(pattern="dd-MM-yyyy 'às' HH:mm:ss")
     private LocalDateTime dataCadastro;
 
-    public static List<VendedorResponse> of(List<Vendedor> vendedor) {
-        return vendedor.stream().map(VendedorResponse::of).collect(Collectors.toList());
-    }
-
     public static VendedorResponse of(Vendedor vendedor) {
         return VendedorResponse.builder()
                 .id(vendedor.getId())
@@ -36,5 +32,9 @@ public class VendedorResponse {
                 .email(vendedor.getEmail())
                 .dataCadastro(vendedor.getDataCadastro())
                 .build();
+    }
+
+    public static List<VendedorResponse> of(List<Vendedor> vendedor) {
+        return vendedor.stream().map(VendedorResponse::of).collect(Collectors.toList());
     }
 }
