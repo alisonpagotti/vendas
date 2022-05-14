@@ -27,14 +27,14 @@ public class VendedorController {
         return service.cadastrar(request);
     }
 
-    @GetMapping("detalhar/{idVendedor}")
-    public VendedorResponse detalhar(@PathVariable Integer idVendedor) {
-        return service.detalhar(idVendedor);
+    @GetMapping("detalhar")
+    public VendedorResponse detalhar(@RequestParam Integer id) {
+        return service.detalhar(id);
     }
 
-    @PutMapping("{idVendedor}")
-    public VendedorResponse atualizar(@PathVariable Integer idVendedor,
+    @PutMapping("atualizar")
+    public VendedorResponse atualizar(@RequestParam Integer id,
                                       @RequestBody @Valid AtualizarVendedorRequest request) {
-        return service.atualizar(idVendedor, request);
+        return service.atualizar(id, request);
     }
 }

@@ -51,9 +51,9 @@ public class VendedorService {
         }
     }
 
-    public VendedorResponse detalhar(Integer idVendedor) {
+    public VendedorResponse detalhar(Integer id) {
         try {
-            var vendedor = repository.getById(idVendedor);
+            var vendedor = repository.getById(id);
 
             return VendedorResponse.of(vendedor);
 
@@ -63,9 +63,9 @@ public class VendedorService {
     }
 
     @Transactional
-    public VendedorResponse atualizar(Integer idVendedor, AtualizarVendedorRequest request) {
+    public VendedorResponse atualizar(Integer id, AtualizarVendedorRequest request) {
         try {
-            var vendedor = repository.getById(idVendedor);
+            var vendedor = repository.getById(id);
             vendedor.atualizar(request.getNome(), request.getEmail());
 
             return VendedorResponse.of(vendedor);

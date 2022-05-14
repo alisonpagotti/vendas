@@ -27,14 +27,14 @@ public class ProdutoController {
         return service.cadastrar(request);
     }
 
-    @GetMapping("detalhar/{idProduto}")
-    public ProdutoResponse detalhar(@PathVariable Integer idProduto) {
-        return service.detalhar(idProduto);
+    @GetMapping("detalhar")
+    public ProdutoResponse detalhar(@RequestParam Integer id) {
+        return service.detalhar(id);
     }
 
-    @PutMapping("{idProduto}")
-    public ProdutoResponse atualizar(@PathVariable Integer idProduto,
+    @PutMapping("atualizar")
+    public ProdutoResponse atualizar(@RequestParam Integer id,
                                      @RequestBody @Valid AtualizarProdutoRequest request) {
-        return service.atualizar(idProduto ,request);
+        return service.atualizar(id ,request);
     }
 }

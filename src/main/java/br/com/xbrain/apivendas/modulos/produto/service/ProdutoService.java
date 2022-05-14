@@ -49,9 +49,9 @@ public class ProdutoService {
         }
     }
 
-    public ProdutoResponse detalhar(Integer idProduto) {
+    public ProdutoResponse detalhar(Integer id) {
         try {
-            var produto = repository.getById(idProduto);
+            var produto = repository.getById(id);
 
             return ProdutoResponse.of(produto);
 
@@ -61,9 +61,9 @@ public class ProdutoService {
     }
 
     @Transactional
-    public ProdutoResponse atualizar(Integer idProduto, AtualizarProdutoRequest request) {
+    public ProdutoResponse atualizar(Integer id, AtualizarProdutoRequest request) {
         try {
-            var produto = repository.getById(idProduto);
+            var produto = repository.getById(id);
             produto.atualizar(request.getNome(), request.getValorProduto());
 
             return ProdutoResponse.of(produto);
