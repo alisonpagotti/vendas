@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,15 @@ public class VendaService {
 
     public List<VendaResponse> listarPorVendedor(Integer id) {
         var vendas = repository.findByVendedorId(id);
+
+        return VendaResponse.of(vendas);
+    }
+
+    public List<VendaResponse> listarPorPeriodo(LocalDate inicio, LocalDate fim) {
+        var vendas = repository.findByDataCadastroBetween(
+                dataHoraService.dataInicial(inicio),
+                dataHoraService.dataFinal(fim)
+        );
 
         return VendaResponse.of(vendas);
     }

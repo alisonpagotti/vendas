@@ -5,9 +5,12 @@ import br.com.xbrain.apivendas.modulos.venda.dto.VendaRequest;
 import br.com.xbrain.apivendas.modulos.venda.dto.VendaResponse;
 import br.com.xbrain.apivendas.modulos.venda.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,6 +28,13 @@ public class VendaController {
     @GetMapping("listar/vendedor")
     public List<VendaResponse> listarPorVendedor(@RequestParam Integer id) {
         return service.listarPorVendedor(id);
+    }
+
+    @GetMapping("listar/periodo")
+    public List<VendaResponse> listarPorPeriodo(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate inicio,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fim) {
+        return service.listarPorPeriodo(inicio, fim);
     }
 
     @PostMapping
