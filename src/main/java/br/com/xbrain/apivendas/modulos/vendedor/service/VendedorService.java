@@ -75,8 +75,14 @@ public class VendedorService {
                 .stream()
                 .map(vendedor -> MediaVendedor.builder()
                         .nome(vendedor.getNome())
-                        .totalVendas(vendedor.getVendas().size())
-                        .mediaDia((double) (vendedor.getVendas().size() / dias))
+                        .totalVendas(vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                                        vendedor.getId(),
+                                        dataHoraService.dataInicial(inicio),
+                                        dataHoraService.dataFinal(fim)).size())
+                        .mediaDia((double) (vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                                        vendedor.getId(),
+                                        dataHoraService.dataInicial(inicio),
+                                        dataHoraService.dataFinal(fim)).size() / dias))
                         .build())
                 .collect(Collectors.toList()
                 );
