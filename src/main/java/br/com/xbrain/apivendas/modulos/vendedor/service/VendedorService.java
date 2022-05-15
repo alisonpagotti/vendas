@@ -79,10 +79,10 @@ public class VendedorService {
                                         vendedor.getId(),
                                         dataHoraService.dataInicial(inicio),
                                         dataHoraService.dataFinal(fim)).size())
-                        .mediaDia((double) (vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                        .mediaDia(vendaRepository.findByVendedorIdAndDataCadastroBetween(
                                         vendedor.getId(),
                                         dataHoraService.dataInicial(inicio),
-                                        dataHoraService.dataFinal(fim)).size() / dias))
+                                        dataHoraService.dataFinal(fim)).size() / (double) dias)
                         .build())
                 .collect(Collectors.toList()
                 );
