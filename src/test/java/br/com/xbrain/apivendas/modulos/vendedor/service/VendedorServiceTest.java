@@ -1,4 +1,4 @@
-package br.com.xbrain.apivendas.modulos.vendedor.controller;
+package br.com.xbrain.apivendas.modulos.vendedor.service;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
 import br.com.xbrain.apivendas.modulos.venda.repository.VendaRepository;
