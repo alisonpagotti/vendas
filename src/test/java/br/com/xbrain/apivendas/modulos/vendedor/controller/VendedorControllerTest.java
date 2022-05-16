@@ -103,6 +103,32 @@ public class VendedorControllerTest {
     }
 
     @Test
+    public void vendedor_cadastrar_cpfComMenosDeOnzeCaracteres() throws Exception {
+
+        doThrow(HttpClientErrorException.BadRequest.class).when(service).cadastrar(any());
+
+        mockMvc.perform(post("/vendedores")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\": \"Agenor Ronega\", " +
+                                "\"cpf\": \"077456434\", " +
+                                "\"email\":\"agenor.ronega@empresa.com.br\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void vendedor_cadastrar_cpfComMaisDeOnzeCaracteres() throws Exception {
+
+        doThrow(HttpClientErrorException.BadRequest.class).when(service).cadastrar(any());
+
+        mockMvc.perform(post("/vendedores")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\": \"Agenor Ronega\", " +
+                                "\"cpf\": \"077456434333\", " +
+                                "\"email\":\"agenor.ronega@empresa.com.br\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void vendedor_cadastrar_emailVazio_badRequest() throws Exception {
 
         doThrow(HttpClientErrorException.BadRequest.class).when(service).cadastrar(any());
