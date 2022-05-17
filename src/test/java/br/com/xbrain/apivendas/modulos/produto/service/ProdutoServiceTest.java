@@ -58,7 +58,7 @@ public class ProdutoServiceTest {
     }
 
     @Test
-    public void produto_cadastrar_nomeJaCadastrado_dataIntegrity() {
+    public void produto_cadastrar_nomeJaCadastrado_badRequest() {
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
