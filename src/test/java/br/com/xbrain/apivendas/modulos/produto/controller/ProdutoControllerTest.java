@@ -19,6 +19,8 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umProduto;
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umProdutoAtualizado;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,14 +44,10 @@ public class ProdutoControllerTest {
 
     @Test
     public void produto_cadastrar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal(3.0))
-                .dataCadastro(dataAtual)
-                .build();
+        var produto = umProduto(1, dataAtual);
 
         when(service.cadastrar(any())).thenReturn(ProdutoResponse.of(produto));
 
@@ -101,14 +99,10 @@ public class ProdutoControllerTest {
 
     @Test
     public void produto_detalhar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal(3.0))
-                .dataCadastro(dataAtual)
-                .build();
+        var produto = umProduto(1, dataAtual);
 
         when(service.detalhar(any())).thenReturn(ProdutoResponse.of(produto));
 
@@ -135,14 +129,10 @@ public class ProdutoControllerTest {
 
     @Test
     public void produto_atualizar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha Atualizada")
-                .valorProduto(new BigDecimal(4.0))
-                .dataCadastro(dataAtual)
-                .build();
+        var produto = umProdutoAtualizado(1, dataAtual);
 
         when(service.atualizar(any(), any())).thenReturn(ProdutoResponse.of(produto));
 

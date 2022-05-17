@@ -16,6 +16,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umVendedor;
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umVendedorAtualizado;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -38,15 +40,10 @@ public class VendedorControllerTest {
 
     @Test
     public void vendedor_cadastrar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
 
         when(service.cadastrar(any())).thenReturn(VendedorResponse.of(vendedor));
 
@@ -142,15 +139,10 @@ public class VendedorControllerTest {
 
     @Test
     public void vendedor_detalhar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
 
         when(service.detalhar(any())).thenReturn(VendedorResponse.of(vendedor));
 
@@ -177,17 +169,12 @@ public class VendedorControllerTest {
 
     @Test
     public void vendedor_atualizar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega Junior")
-                .cpf("07745643433")
-                .email("agenor.ronega.junior@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
+        var vendedorAtualizado = umVendedorAtualizado(1, dataAtual);
 
-        when(service.atualizar(any(), any())).thenReturn(VendedorResponse.of(vendedor));
+        when(service.atualizar(any(), any())).thenReturn(VendedorResponse.of(vendedorAtualizado));
 
         mockMvc.perform(put("/vendedores/atualizar")
                         .param("id", String.valueOf(1))

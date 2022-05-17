@@ -16,6 +16,7 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -34,20 +35,13 @@ public class ProdutoServiceTest {
 
     @Test
     public void produto_cadastrar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
 
-        var produto = Produto.builder()
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produtoRequest = ProdutoRequest.builder()
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .build();
+        var produto = umProduto(null, dataAtual);
+        var produtoRequest = umProdutoRequest();
 
         var produtoCadastrado = service.cadastrar(produtoRequest);
 
@@ -59,20 +53,13 @@ public class ProdutoServiceTest {
 
     @Test
     public void produto_cadastrar_nomeJaCadastrado_badRequest() {
+
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
 
-        var produto = Produto.builder()
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produtoRequest = ProdutoRequest.builder()
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .build();
+        var produto = umProduto(null, dataAtual);
+        var produtoRequest = umProdutoRequest();
 
         doThrow(new DataIntegrityViolationException("Produto já cadastrado!")).when(repository).save(produto);
 
@@ -85,14 +72,10 @@ public class ProdutoServiceTest {
 
     @Test
     public void produto_detalhar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
+        var produto = umProduto(1, dataAtual);
 
         when(repository.getById(1)).thenReturn(produto);
 
@@ -118,19 +101,11 @@ public class ProdutoServiceTest {
 
     @Test
     public void produto_atualizar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha Atualizada")
-                .valorProduto(new BigDecimal("4.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var atualizarProdutoRequest = AtualizarProdutoRequest.builder()
-                .nome("Caneta Vermelha Atualizada")
-                .valorProduto(new BigDecimal("4.0"))
-                .build();
+        var produto = umProduto(1, dataAtual);
+        var atualizarProdutoRequest = umAtualizarProdutoRequest();
 
         when(repository.getById(1)).thenReturn(produto);
 

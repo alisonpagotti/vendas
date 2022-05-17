@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -43,32 +44,12 @@ public class VendaControllerTest {
 
     @Test
     public void venda_cadastrar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produto = List.of(
-                Produto.builder()
-                        .id(1)
-                        .nome("Caneta Vermelha")
-                        .valorProduto(new BigDecimal("3.0"))
-                        .dataCadastro(dataAtual)
-                        .build()
-        );
-
-        var venda = Venda.builder()
-                .id(1)
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(produto)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produtos = List.of(umProduto(1, dataAtual));
+        var venda = umaVenda(1, dataAtual, vendedor, produtos);
 
         when(service.cadastrar(any())).thenReturn(VendaResponse.of(venda));
 
@@ -108,32 +89,12 @@ public class VendaControllerTest {
 
     @Test
     public void venda_detalhar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produto = List.of(
-                Produto.builder()
-                        .id(1)
-                        .nome("Caneta Vermelha")
-                        .valorProduto(new BigDecimal("3.0"))
-                        .dataCadastro(dataAtual)
-                        .build()
-        );
-
-        var venda = Venda.builder()
-                .id(1)
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(produto)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produtos = List.of(umProduto(1, dataAtual));
+        var venda = umaVenda(1, dataAtual, vendedor, produtos);
 
         when(service.detalhar(any())).thenReturn(VendaResponse.of(venda));
 
@@ -159,32 +120,12 @@ public class VendaControllerTest {
 
     @Test
     public void venda_atualizar_sucesso() throws Exception {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produto = List.of(
-                Produto.builder()
-                        .id(1)
-                        .nome("Caneta Vermelha")
-                        .valorProduto(new BigDecimal("3.0"))
-                        .dataCadastro(dataAtual)
-                        .build()
-        );
-
-        var vendaAtualizada = Venda.builder()
-                .id(1)
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(produto)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produtos = List.of(umProduto(1, dataAtual));
+        var vendaAtualizada = umaVenda(1, dataAtual, vendedor, produtos);
 
         when(service.atualizar(any(), any())).thenReturn(VendaResponse.of(vendaAtualizada));
 

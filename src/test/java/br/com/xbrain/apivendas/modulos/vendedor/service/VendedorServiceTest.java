@@ -15,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -33,22 +34,13 @@ public class VendedorServiceTest {
 
     @Test
     public void vendedor_cadastrar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
 
-        var vendedor = Vendedor.builder()
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var vendedorRequest = VendedorRequest.builder()
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .build();
+        var vendedor = umVendedor(null, dataAtual);
+        var vendedorRequest = umVendedorRequest();
 
         var vendedorCadastrado = service.cadastrar(vendedorRequest);
 
@@ -61,22 +53,13 @@ public class VendedorServiceTest {
 
     @Test
     public void vendedor_cadastrar_nomeJaCadastrado_badRequest() {
+
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
 
-        var vendedor = Vendedor.builder()
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var vendedorRequest = VendedorRequest.builder()
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .build();
+        var vendedor = umVendedor(null, dataAtual);
+        var vendedorRequest = umVendedorRequest();
 
         doThrow(new DataIntegrityViolationException("CPF ou e-mail já cadastrado!")).when(repository).save(vendedor);
 
@@ -89,15 +72,10 @@ public class VendedorServiceTest {
 
     @Test
     public void vendedor_detalhar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
 
         when(repository.getById(1)).thenReturn(vendedor);
 
@@ -124,20 +102,11 @@ public class VendedorServiceTest {
 
     @Test
     public void vendedor_atualizar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega Junior")
-                .cpf("07745643433")
-                .email("agenor.ronega.junior@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var atualizarVendedorRequest = AtualizarVendedorRequest.builder()
-                .nome("Agenor Ronega Junior")
-                .email("agenor.ronega.junior@empresa.com.br")
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var atualizarVendedorRequest = umAtualizarVendedorRequest();
 
         when(repository.getById(1)).thenReturn(vendedor);
 

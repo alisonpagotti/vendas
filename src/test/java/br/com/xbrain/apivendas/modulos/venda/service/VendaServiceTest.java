@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static br.com.xbrain.apivendas.modulos.helper.TestHelper.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -44,38 +45,17 @@ public class VendaServiceTest {
 
     @Test
     public void venda_cadastrar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
         when(dataHoraService.DataHoraAtual()).thenReturn(dataAtual);
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produtos = umProduto(1, dataAtual);
+        var venda = umaVenda(null, dataAtual, vendedor, List.of(produtos));
+        var vendaRequest = umaVendaRequest(vendedor.getId(), List.of(1));
 
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var venda = Venda.builder()
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(List.of(produto))
-                .build();
-
-        var vendaRequest = VendaRequest.builder()
-                .idVendedor(vendedor.getId())
-                .idProdutos(List.of(1))
-                .build();
-
-        when(produtoRepository.getById(1)).thenReturn(produto);
+        when(produtoRepository.getById(1)).thenReturn(produtos);
         when(vendedorRepository.getById(1)).thenReturn(vendedor);
 
         var vendaCadastrada = service.cadastrar(vendaRequest);
@@ -90,28 +70,9 @@ public class VendaServiceTest {
     public void venda_detalhar_sucesso() throws Exception {
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var venda = Venda.builder()
-                .id(1)
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(List.of(produto))
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produtos = umProduto(1, dataAtual);
+        var venda = umaVenda(1, dataAtual, vendedor, List.of(produtos));
 
         when(repository.getById(1)).thenReturn(venda);
 
@@ -138,34 +99,13 @@ public class VendaServiceTest {
 
     @Test
     public void venda_atualizar_sucesso() {
+
         var dataAtual = LocalDateTime.now();
 
-        var vendedor = Vendedor.builder()
-                .id(1)
-                .nome("Agenor Ronega")
-                .cpf("07745643433")
-                .email("agenor.ronega@empresa.com.br")
-                .dataCadastro(dataAtual)
-                .build();
-
-        var produto = Produto.builder()
-                .id(1)
-                .nome("Caneta Vermelha")
-                .valorProduto(new BigDecimal("3.0"))
-                .dataCadastro(dataAtual)
-                .build();
-
-        var venda = Venda.builder()
-                .id(1)
-                .dataCadastro(dataAtual)
-                .valorVenda(new BigDecimal("3.0"))
-                .vendedor(vendedor)
-                .produtos(List.of(produto))
-                .build();
-
-        var atualizarVendaRequest = AtualizarVendaRequest.builder()
-                .idProdutos(List.of(produto.getId()))
-                .build();
+        var vendedor = umVendedor(1, dataAtual);
+        var produto = umProduto(1, dataAtual);
+        var venda = umaVenda(1, dataAtual, vendedor, List.of(produto));
+        var atualizarVendaRequest = umaAtualizarVendaRequest(List.of(produto.getId()));
 
         when(produtoRepository.getById(1)).thenReturn(produto);
         when(repository.getById(1)).thenReturn(venda);
