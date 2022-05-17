@@ -1,13 +1,10 @@
 package br.com.xbrain.apivendas.modulos.vendedor.service;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
-import br.com.xbrain.apivendas.modulos.venda.repository.VendaRepository;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.AtualizarVendedorRequest;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorRequest;
-import br.com.xbrain.apivendas.modulos.vendedor.model.MediaVendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
-import br.com.xbrain.apivendas.modulos.vendedor.service.VendedorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,9 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
