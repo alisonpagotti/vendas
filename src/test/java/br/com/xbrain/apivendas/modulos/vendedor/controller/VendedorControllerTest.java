@@ -103,7 +103,7 @@ public class VendedorControllerTest {
     }
 
     @Test
-    public void vendedor_cadastrar_cpfComMenosDeOnzeCaracteres() throws Exception {
+    public void vendedor_cadastrar_cpfComMenosDeOnzeCaracteres_badRequest() throws Exception {
 
         doThrow(HttpClientErrorException.BadRequest.class).when(service).cadastrar(any());
 
@@ -116,7 +116,7 @@ public class VendedorControllerTest {
     }
 
     @Test
-    public void vendedor_cadastrar_cpfComMaisDeOnzeCaracteres() throws Exception {
+    public void vendedor_cadastrar_cpfComMaisDeOnzeCaracteres_badRequest() throws Exception {
 
         doThrow(HttpClientErrorException.BadRequest.class).when(service).cadastrar(any());
 
