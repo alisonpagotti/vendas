@@ -52,8 +52,7 @@ public class VendedorControllerTest {
 
         mockMvc.perform(post("/vendedores")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Agenor Ronega\", " +
+                        .content("{\"nome\": \"Agenor Ronega\", " +
                                 "\"cpf\": \"07745643433\", " +
                                 "\"email\":\"agenor.ronega@empresa.com.br\"}"))
                 .andExpect(status().isOk())
@@ -200,6 +199,21 @@ public class VendedorControllerTest {
                 .andExpect(jsonPath("$.nome").value("Agenor Ronega Junior"))
                 .andExpect(jsonPath("$.cpf").value("07745643433"))
                 .andExpect(jsonPath("$.email").value("agenor.ronega.junior@empresa.com.br"));
+    }
+
+    @Test
+    public void vendedor_atualizar_idNaoCadastrado_notFound() throws Exception {
+
+        doThrow(new EntityNotFoundException("Vendedor não cadastrado!")).when(service).atualizar(any(), any());
+
+        mockMvc.perform(put("/vendedores/atualizar")
+                        .param("id", String.valueOf(1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\": \"Agenor Ronega Junior\", " +
+                                "\"email\":\"agenor.ronega.junior@empresa.com.br\"}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Não foi possível realizar essa operação!"))
+                .andExpect(jsonPath("$.detalhes").value("Vendedor não cadastrado!"));
     }
 
     @Test

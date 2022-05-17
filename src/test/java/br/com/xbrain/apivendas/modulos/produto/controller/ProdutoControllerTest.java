@@ -55,8 +55,7 @@ public class ProdutoControllerTest {
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Caneta Vermelha\", " +
+                        .content("{\"nome\": \"Caneta Vermelha\", " +
                                 "\"valorProduto\": 3.0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
@@ -71,8 +70,7 @@ public class ProdutoControllerTest {
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"\", " +
+                        .content("{\"nome\": \"\", " +
                                 "\"valorProduto\": 3.0}"))
                 .andExpect(status().isBadRequest());
     }
@@ -84,8 +82,7 @@ public class ProdutoControllerTest {
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Ab\", " +
+                        .content("{\"nome\": \"Ab\", " +
                                 "\"valorProduto\": 3.0}"))
                 .andExpect(status().isBadRequest());
     }
@@ -97,8 +94,7 @@ public class ProdutoControllerTest {
 
         mockMvc.perform(post("/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Caneta Vermelha\", " +
+                        .content("{\"nome\": \"Caneta Vermelha\", " +
                                 "\"valorProduto\": 0.0}"))
                 .andExpect(status().isBadRequest());
     }
@@ -153,14 +149,28 @@ public class ProdutoControllerTest {
         mockMvc.perform(put("/produtos/atualizar")
                         .param("id", String.valueOf(1))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Caneta Vermelha Atualizada\", " +
+                        .content("{\"nome\": \"Caneta Vermelha Atualizada\", " +
                                 "\"valorProduto\": 4.0}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.nome").value("Caneta Vermelha Atualizada"))
                 .andExpect(jsonPath("$.valorProduto").value(4.0));
 
+    }
+
+    @Test
+    public void produto_atualizar_idNaoCadastrado_notFound() throws Exception {
+
+        doThrow(new EntityNotFoundException("Produto não cadastrado!")).when(service).atualizar(any(), any());
+
+        mockMvc.perform(put("/produtos/atualizar")
+                        .param("id", String.valueOf(1))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nome\": \"Caneta Vermelha Atualizada\", " +
+                                "\"valorProduto\": 4.0}"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.mensagem").value("Não foi possível realizar essa operação!"))
+                .andExpect(jsonPath("$.detalhes").value("Produto não cadastrado!"));
     }
 
     @Test
@@ -171,8 +181,7 @@ public class ProdutoControllerTest {
         mockMvc.perform(put("/produtos/atualizar")
                         .param("id", String.valueOf(1))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"\", " +
+                        .content("{\"nome\": \"\", " +
                                 "\"valorProduto\": 3.0}"))
                 .andExpect(status().isBadRequest());
     }
@@ -185,8 +194,7 @@ public class ProdutoControllerTest {
         mockMvc.perform(put("/produtos/atualizar")
                         .param("id", String.valueOf(1))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Ab\", " +
+                        .content("{\"nome\": \"Ab\", " +
                                 "\"valorProduto\": 3.0}"))
                 .andExpect(status().isBadRequest());
     }
@@ -199,8 +207,7 @@ public class ProdutoControllerTest {
         mockMvc.perform(put("/produtos/atualizar")
                         .param("id", String.valueOf(1))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\": 1," +
-                                "\"nome\": \"Caneta Vermelha\", " +
+                        .content("{\"nome\": \"Caneta Vermelha\", " +
                                 "\"valorProduto\": 0.0}"))
                 .andExpect(status().isBadRequest());
     }
