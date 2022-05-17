@@ -1,9 +1,6 @@
 package br.com.xbrain.apivendas.modulos.vendedor.service;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
-import br.com.xbrain.apivendas.modulos.vendedor.dto.AtualizarVendedorRequest;
-import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorRequest;
-import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;

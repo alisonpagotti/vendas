@@ -7,12 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
