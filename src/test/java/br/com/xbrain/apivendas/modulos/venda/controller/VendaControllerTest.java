@@ -18,6 +18,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,6 +42,69 @@ public class VendaControllerTest {
 
     @MockBean
     private DataHoraService dataHoraService;
+
+    @Test
+    public void venda_listarPorVendedor_sucesso() throws Exception {
+
+        var dataAtual = LocalDateTime.now();
+
+        var vendas = List.of(
+                umaVenda(1, dataAtual, umVendedor(1, dataAtual), List.of(umProduto(1, dataAtual))));
+
+        when(service.listarPorVendedor(1)).thenReturn(VendaResponse.of(vendas));
+
+        mockMvc.perform(get("/vendas/listar/vendedor")
+                        .param("id", String.valueOf(1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].valorVenda").value(3.0))
+                .andExpect(jsonPath("$.[0].idVendedor").value(1))
+                .andExpect(jsonPath("$.[0].nomeVendedor").value("Agenor Ronega"));
+    }
+
+    @Test
+    public void venda_listarPorPeriodo_sucesso() throws Exception {
+
+        var dataAtual = LocalDateTime.now();
+
+        var inicio = LocalDate.of(2022, 5, 10);
+        var fim = LocalDate.of(2022, 5, 10);
+
+        var vendas = List.of(
+                umaVenda(1, dataAtual, umVendedor(1, dataAtual), List.of(umProduto(1, dataAtual))));
+
+        when(service.listarPorPeriodo(inicio, fim)).thenReturn(VendaResponse.of(vendas));
+
+        mockMvc.perform(get("/vendas/listar/periodo")
+                        .param("inicio", "10-05-2022")
+                        .param("fim", "10-05-2022"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].valorVenda").value(3.0))
+                .andExpect(jsonPath("$.[0].idVendedor").value(1))
+                .andExpect(jsonPath("$.[0].nomeVendedor").value("Agenor Ronega"));
+    }
+
+    @Test
+    public void venda_listarPorVendedorPeriodo_sucesso() throws Exception {
+
+        var dataAtual = LocalDateTime.now();
+
+        var inicio = LocalDate.of(2022, 5, 10);
+        var fim = LocalDate.of(2022, 5, 10);
+
+        var vendas = List.of(
+                umaVenda(1, dataAtual, umVendedor(1, dataAtual), List.of(umProduto(1, dataAtual))));
+
+        when(service.listarPorVendedorPeriodo(1, inicio, fim)).thenReturn(VendaResponse.of(vendas));
+
+        mockMvc.perform(get("/vendas/listar/vendedor/periodo")
+                        .param("id", String.valueOf(1))
+                        .param("inicio", "10-05-2022")
+                        .param("fim", "10-05-2022"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].valorVenda").value(3.0))
+                .andExpect(jsonPath("$.[0].idVendedor").value(1))
+                .andExpect(jsonPath("$.[0].nomeVendedor").value("Agenor Ronega"));
+    }
 
     @Test
     public void venda_cadastrar_sucesso() throws Exception {
