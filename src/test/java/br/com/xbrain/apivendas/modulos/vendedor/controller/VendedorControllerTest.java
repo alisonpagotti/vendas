@@ -1,7 +1,9 @@
 package br.com.xbrain.apivendas.modulos.vendedor.controller;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
+import br.com.xbrain.apivendas.modulos.vendedor.dto.MediaVendedorResponse;
 import br.com.xbrain.apivendas.modulos.vendedor.dto.VendedorResponse;
+import br.com.xbrain.apivendas.modulos.vendedor.model.MediaVendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.model.Vendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.service.VendedorService;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umVendedor;
 import static br.com.xbrain.apivendas.modulos.helper.TestHelper.umVendedorAtualizado;
@@ -37,6 +41,53 @@ public class VendedorControllerTest {
 
     @MockBean
     private DataHoraService dataHoraService;
+
+    @Test
+    public void vendedor_mediaPorVendedor_sucesso() throws Exception {
+
+        var inicio = LocalDate.of(2022, 5, 10);
+        var fim = LocalDate.of(2022, 5, 10);
+
+        var mediaVendedor = MediaVendedor.builder()
+                .nome("Agenor Ronega")
+                .totalVendas(1)
+                .mediaDia(1.0)
+                .build();
+
+        when(service.mediaPorVendedor(1, inicio, fim)).thenReturn(MediaVendedorResponse.of(mediaVendedor));
+
+        mockMvc.perform(get("/vendedores/media/vendedor")
+                        .param("id", String.valueOf(1))
+                        .param("inicio", "10-05-2022")
+                        .param("fim", "10-05-2022"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nome").value("Agenor Ronega"))
+                .andExpect(jsonPath("$.totalVendas").value(1))
+                .andExpect(jsonPath("$.mediaDia").value(1.0));
+    }
+
+    @Test
+    public void vendedor_mediaTodosVendedores() throws Exception {
+
+        var inicio = LocalDate.of(2022, 5, 10);
+        var fim = LocalDate.of(2022, 5, 10);
+
+        var mediaVendedor = List.of(MediaVendedor.builder()
+                .nome("Agenor Ronega")
+                .totalVendas(1)
+                .mediaDia(1.0)
+                .build());
+
+        when(service.mediaTodosVendedores(inicio, fim)).thenReturn(MediaVendedorResponse.of(mediaVendedor));
+
+        mockMvc.perform(get("/vendedores/media")
+                        .param("inicio", "10-05-2022")
+                        .param("fim", "10-05-2022"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].nome").value("Agenor Ronega"))
+                .andExpect(jsonPath("$.[0].totalVendas").value(1))
+                .andExpect(jsonPath("$.[0].mediaDia").value(1.0));
+    }
 
     @Test
     public void vendedor_cadastrar_sucesso() throws Exception {
