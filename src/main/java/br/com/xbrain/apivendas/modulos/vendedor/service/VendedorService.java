@@ -43,24 +43,29 @@ public class VendedorService {
     }
 
     public MediaVendedorResponse mediaPorVendedor(Integer id, LocalDate inicio, LocalDate fim) {
-        var vendedor = repository.getById(id);
+        try {
+            var vendedor = repository.getById(id);
 
-        var quantidadeDeVendas = vendaRepository.findByVendedorIdAndDataCadastroBetween(
-                id,
-                dataHoraService.dataInicial(inicio),
-                dataHoraService.dataFinal(fim))
-                .size();
+            var quantidadeDeVendas = vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                            id,
+                            dataHoraService.dataInicial(inicio),
+                            dataHoraService.dataFinal(fim))
+                    .size();
 
-        var dias = inicio.until(fim, ChronoUnit.DAYS) + 1;
-        var media = (double) quantidadeDeVendas / dias;
+            var dias = inicio.until(fim, ChronoUnit.DAYS) + 1;
+            var media = (double) quantidadeDeVendas / dias;
 
-        var mediaVendedor = MediaVendedor.builder()
-                .nome(vendedor.getNome())
-                .totalVendas(quantidadeDeVendas)
-                .mediaDia(media)
-                .build();
+            var mediaVendedor = MediaVendedor.builder()
+                    .nome(vendedor.getNome())
+                    .totalVendas(quantidadeDeVendas)
+                    .mediaDia(media)
+                    .build();
 
-        return MediaVendedorResponse.of(mediaVendedor);
+            return MediaVendedorResponse.of(mediaVendedor);
+
+        } catch (Exception ex) {
+            throw new EntityNotFoundException(EX_VENDEDOR_NAO_CADASTRADO);
+        }
     }
 
     public List<MediaVendedorResponse> mediaTodosVendedores(LocalDate inicio, LocalDate fim) {
