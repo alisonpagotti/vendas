@@ -1,6 +1,5 @@
 package br.com.xbrain.apivendas.modulos.venda.dto;
 
-import br.com.xbrain.apivendas.modulos.produto.model.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

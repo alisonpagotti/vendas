@@ -26,8 +26,9 @@ public class VendedorController {
     }
 
     @GetMapping("media")
-    public List<MediaVendedorResponse> mediaTodosVendedores(@RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate inicio,
-                                                            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fim) {
+    public List<MediaVendedorResponse> mediaTodosVendedores(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate inicio,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate fim) {
         return service.mediaTodosVendedores(inicio, fim);
     }
 

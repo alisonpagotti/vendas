@@ -28,7 +28,6 @@ public class Produto {
     private BigDecimal valorProduto;
     @Column(name = "DATA_CADASTRO")
     private LocalDateTime dataCadastro;
-
     @ManyToMany(mappedBy = "produtos", fetch = FetchType.LAZY)
     private List<Venda> venda;
 
