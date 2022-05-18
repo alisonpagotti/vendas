@@ -1,6 +1,8 @@
 package br.com.xbrain.apivendas.modulos.vendedor.service;
 
 import br.com.xbrain.apivendas.modulos.comum.data.service.DataHoraService;
+import br.com.xbrain.apivendas.modulos.venda.repository.VendaRepository;
+import br.com.xbrain.apivendas.modulos.vendedor.model.MediaVendedor;
 import br.com.xbrain.apivendas.modulos.vendedor.repository.VendedorRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +12,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static br.com.xbrain.apivendas.modulos.helper.TestHelper.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,10 +28,46 @@ public class VendedorServiceTest {
     private VendedorRepository repository;
 
     @Mock
+    private VendaRepository vendaRepository;
+
+    @Mock
     private DataHoraService dataHoraService;
 
     @InjectMocks
     private VendedorService service;
+
+    @Test
+    public void vendedor_mediaPorVededor_sucesso() {
+
+        var dataCadastro = LocalDateTime.of(
+                2022, 5, 10,
+                9, 0, 0
+        );
+
+        var inicio = LocalDate.of(2022, 5, 10);
+        var fim = LocalDate.of(2022, 5, 10);
+
+        var venda = umaVenda(1, dataCadastro, umVendedor(1, dataCadastro), List.of(umProduto(1, dataCadastro)));
+
+        when(repository.getById(1)).thenReturn(venda.getVendedor());
+        when(vendaRepository.findByVendedorIdAndDataCadastroBetween(
+                1,
+                inicio.atTime(0,0,0),
+                fim.atTime(23, 59, 59)))
+                .thenReturn(List.of(venda));
+
+        var mediaVendedor = MediaVendedor.builder()
+                .nome(venda.getVendedor().getNome())
+                .totalVendas(1)
+                .mediaDia(1.0)
+                .build();
+
+        venda.getVendedor().setVendas(List.of(venda));
+
+        var mediaPorVendedor = service.mediaPorVendedor(venda.getVendedor().getId(), inicio, fim);
+
+        assertEquals(mediaVendedor.getTotalVendas(), mediaPorVendedor.getTotalVendas());
+    }
 
     @Test
     public void vendedor_cadastrar_sucesso() {
